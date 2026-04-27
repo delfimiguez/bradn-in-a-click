@@ -34,7 +34,7 @@ Make each direction dramatically different in tone, aesthetic, and strategy.
 Be specific and professional. No placeholders. Real brand thinking.`;
 
 async function generateBrands(description) {
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
+  const response = await fetch("/api/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -45,6 +45,7 @@ async function generateBrands(description) {
     }),
   });
   const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "API error");
   const text = data.content?.find((b) => b.type === "text")?.text || "[]";
   return JSON.parse(text.replace(/```json|```/g, "").trim());
 }
